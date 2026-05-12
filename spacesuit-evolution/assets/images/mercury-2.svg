@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <rect width="1200" height="900" fill="#15151a"/>
+  <g fill="#ffffff" fill-opacity="0.06">
+    <circle cx="620" cy="420" r="260"/>
+  </g>
+  <text x="70" y="820" font-family="Inter, system-ui, Arial" font-size="44" fill="#ffffff" fill-opacity="0.75">
+    Mercury - sub 2 (placeholder)
+  </text>
+</svg>
