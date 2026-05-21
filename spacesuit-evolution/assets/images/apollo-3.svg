@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
-  <rect width="1200" height="900" fill="#15151a"/>
-  <path d="M140 680c260-180 420-240 600-190s250 140 320 110v160H140V680z" fill="#ffffff" fill-opacity="0.06"/>
-  <text x="70" y="820" font-family="Inter, system-ui, Arial" font-size="44" fill="#ffffff" fill-opacity="0.75">
-    Apollo - sub 3 (placeholder)
-  </text>
-</svg>

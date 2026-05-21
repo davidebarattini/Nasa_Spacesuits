@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750">
+  <rect width="1200" height="750" fill="#141418"/>
+  <rect x="120" y="160" width="960" height="430" rx="28" fill="#ffffff" fill-opacity="0.06"/>
+  <text x="150" y="210" font-family="Inter, system-ui, Arial" font-size="40" fill="#ffffff" fill-opacity="0.75">
+    Pin 2 - Giunture (placeholder)
+  </text>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750">
+  <rect width="1200" height="750" fill="#16161a"/>
+  <g fill="#ffffff" fill-opacity="0.06">
+    <circle cx="360" cy="340" r="160"/>
+    <circle cx="620" cy="340" r="160"/>
+    <circle cx="880" cy="340" r="160"/>
+  </g>
+  <text x="120" y="160" font-family="Inter, system-ui, Arial" font-size="40" fill="#ffffff" fill-opacity="0.75">
+    Placeholder 4
+  </text>
+</svg>

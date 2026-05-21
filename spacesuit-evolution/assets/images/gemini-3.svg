@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
-  <rect width="1200" height="900" fill="#15151a"/>
-  <path d="M0 640c220-140 420-180 600-120s330 170 600 40v220H0V640z" fill="#ffffff" fill-opacity="0.06"/>
-  <text x="70" y="820" font-family="Inter, system-ui, Arial" font-size="44" fill="#ffffff" fill-opacity="0.75">
-    Gemini - sub 3 (placeholder)
-  </text>
-</svg>

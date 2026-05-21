@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
-  <rect width="1200" height="900" fill="#141418"/>
-  <path d="M0 700C160 590 320 560 480 610s320 190 480 170 240-130 240-130v250H0V700z" fill="#ffffff" fill-opacity="0.06"/>
-  <text x="70" y="820" font-family="Inter, system-ui, Arial" font-size="44" fill="#ffffff" fill-opacity="0.75">
-    Placeholder immagine (Intro 3)
-  </text>
-</svg>

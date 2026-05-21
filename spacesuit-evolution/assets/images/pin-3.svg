@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750">
-  <rect width="1200" height="750" fill="#141418"/>
-  <g fill="#ffffff" fill-opacity="0.06">
-    <path d="M180 540c80-120 150-170 240-160s180 80 260 70 150-90 340-160v260H180V540z"/>
-  </g>
-  <text x="120" y="160" font-family="Inter, system-ui, Arial" font-size="40" fill="#ffffff" fill-opacity="0.75">
-    Pin 3 - Stivali (placeholder)
-  </text>
-</svg>
