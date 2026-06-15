@@ -33,9 +33,7 @@ Le principali modalità di interazione includono:
 - Navigazione tra diverse tute appartenenti a epoche e missioni differenti;
 - Organizzazione cronologica dei contenuti.
 
-https://github.com/user-attachments/assets/38d1768e-a90e-45dd-b12b-1ac0aa1151b3
-
-[<img src="doc/cards.gif" width="500" alt="Magic trick">]()
+[<img src="doc/interfaccia.png" width="500" alt="Magic trick">]()
 
 
 ## Tecnologia usata
@@ -63,28 +61,20 @@ Le informazioni sono organizzate in livelli:
 - dettagli tecnici
 Questo sistema consente all’utente di passare progressivamente da una visione generale a un’esplorazione più dettagliata.
 
-
+Definizione degli hotspot
 ```JavaScript
-const image = new Image();
-image.onload = () => {
-	gl.bindTexture(gl.TEXTURE_2D, texture);
-	gl.texImage2D(
-		gl.TEXTURE_2D,
-		level,
-		internalFormat,
-		srcFormat,
-		srcType,
-		image
-	);
-	if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
-		gl.generateMipmap(gl.TEXTURE_2D);
-	} else {
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-	}
-};
-image.src = url;
+pins: [
+  { n: 1, x: "52%", y: "22%", panelId: "casco" },
+  { n: 2, x: "49%", y: "47%", panelId: "tubo_ossigeno" },
+  { n: 3, x: "40%", y: "70%", panelId: "giunture" },
+]
+```
+Creazione dei bottoni
+```JavaScript
+const btn = el("button", "pin", {
+  style: `left:${p.x};top:${p.y};`,
+  "data-panel-id": p.panelId,
+}); "40%", y: "70%", panelId: "giunture" },
 ```
 
 ## Target e contesto d’uso
