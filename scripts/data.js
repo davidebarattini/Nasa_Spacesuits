@@ -22,7 +22,7 @@ export const slides = [
     type: "intro",
     title: "Spacesuit Evolution",
     subtitleHtml:
-      "L’evoluzione delle tute spaziali raccontata attraverso il contesto storico, le missioni e le innovazioni che hanno reso possibile vivere e lavorare nello spazio.",
+      "L’evoluzione delle tute spaziali dal 1958 al 2011, raccontata attraverso il contesto storico, le missioni e le innovazioni che hanno reso possibile vivere e lavorare nello spazio.",
   },
 
   {

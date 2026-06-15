@@ -17,8 +17,12 @@ L’obiettivo è rendere accessibile un contenuto tecnico attraverso una modalit
 
 
 ## Riferimenti progettuali
-Archivi digitali NASA e collezioni open access
-A livello visivo, il progetto mantiene un’estetica pulita e informativa, lasciando centralità alle immagini delle tute e ai dettagli tecnici.
+[<img src="doc/Figma.jpg" width="300" alt="Supplemento al dizionario italiano">]()
+[<img src="doc/mFramer.png.jpeg" width="300" alt="Supplemento al dizionario italiano">]()
+[<img src="doc/Apple.png" width="300" alt="Supplemento al dizionario italiano">]()
+Per la progettazione dell'interfaccia sono stati presi come riferimento diversi prodotti digitali esistenti.
+Apple ha ispirato il sistema di hotspot interattivi, utilizzati per evidenziare e approfondire specifici elementi delle tute spaziali direttamente all'interno della visualizzazione.
+Figma e Framer hanno invece influenzato la struttura dell'interfaccia, basata su un layout a tre colonne che separa navigazione, contenuto principale e pannello di approfondimento, favorendo un'esplorazione chiara e organizzata delle informazioni.
 
 
 ## Design dell’interfaccia e modalità di interazione
@@ -54,9 +58,9 @@ aggiornamento dinamico dei contenuti
 Il layout è realizzato tramite CSS (Grid e Flexbox).
 I contenuti testuali e visivi sono stati raccolti da archivi pubblici della NASA e rielaborati per essere integrati nell’interfaccia.
 Le informazioni sono organizzate in livelli:
-slide principali
-approfondimenti 
-dettagli tecnici
+- slide principali
+- approfondimenti 
+- dettagli tecnici
 Questo sistema consente all’utente di passare progressivamente da una visione generale a un’esplorazione più dettagliata.
 
 
