@@ -6,7 +6,7 @@ Progetto 1: La conquista dello spazio
 
 # Spacesuit evolution
 Autore: Davide Barattini \
-[Spacesuit evolution](https://github.com/ixd-supsi/2026/tree/main/esempi/es06_array_7)
+[Spacesuit evolution](https://davidebarattini.github.io/Nasa_Spacesuits/)
 
 
 ## Introduzione e tema
