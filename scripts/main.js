@@ -1,4 +1,7 @@
-import { MAIN_POINTS, getSlideLabel, slides } from "./data.js";
+import "https://cdn.jsdelivr.net/npm/@google/model-viewer/dist/model-viewer-module.min.js";
+import * as THREE from "three";
+import { MAIN_POINTS, credits, creditsIntro, getSlideLabel, slides } from "./data.js";
+import { getImageCredit } from "./image-credits.js";
 
 const viewport = document.getElementById("viewport");
 const deck = document.getElementById("deck");
@@ -201,9 +204,90 @@ function attachPreviewHover({ btn, getSrc, preview, previewImg, delayMs = 220 })
   });
 }
 
+function ensureLightboxCreditOverlay(dialog) {
+  let stage = dialog.querySelector(".lightbox__stage");
+  const img = dialog.querySelector(".lightbox__img");
+  if (!(img instanceof HTMLImageElement)) return null;
+
+  if (!stage) {
+    stage = document.createElement("div");
+    stage.className = "lightbox__stage";
+    img.replaceWith(stage);
+    stage.appendChild(img);
+  }
+
+  let overlay = dialog.querySelector(".lightbox__credit");
+  if (overlay instanceof HTMLElement && overlay.parentElement === stage) {
+    dialog.insertBefore(overlay, stage);
+  }
+
+  if (overlay instanceof HTMLElement) return stage;
+
+  overlay = document.createElement("div");
+  overlay.className = "lightbox__credit";
+  overlay.setAttribute("aria-hidden", "true");
+
+  const title = document.createElement("h3");
+  title.className = "lightbox__creditTitle typeTitle--panel";
+
+  const place = document.createElement("p");
+  place.className = "lightbox__creditPlace";
+
+  const desc = document.createElement("p");
+  desc.className = "lightbox__creditDesc typeBody";
+
+  const creditLine = document.createElement("p");
+  creditLine.className = "lightbox__creditLine typeBody--compact";
+  const link = document.createElement("a");
+  link.className = "lightbox__creditLink";
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  creditLine.append("Image Credit: ");
+  creditLine.appendChild(link);
+
+  overlay.appendChild(title);
+  overlay.appendChild(place);
+  overlay.appendChild(desc);
+  overlay.appendChild(creditLine);
+  dialog.insertBefore(overlay, stage);
+  return stage;
+}
+
+function updateLightboxCredit(root, src) {
+  const overlay = root.querySelector(".lightbox__credit");
+  if (!(overlay instanceof HTMLElement)) return;
+
+  const meta = getImageCredit(src);
+  if (!meta) {
+    overlay.classList.remove("isAvailable");
+    overlay.setAttribute("aria-hidden", "true");
+    return;
+  }
+
+  const title = overlay.querySelector(".lightbox__creditTitle");
+  const place = overlay.querySelector(".lightbox__creditPlace");
+  const desc = overlay.querySelector(".lightbox__creditDesc");
+  const link = overlay.querySelector(".lightbox__creditLink");
+  if (!(title instanceof HTMLElement) || !(place instanceof HTMLElement) || !(desc instanceof HTMLElement) || !(link instanceof HTMLAnchorElement)) {
+    return;
+  }
+
+  title.textContent = meta.title || "";
+  place.textContent = meta.place || "";
+  desc.textContent = meta.description || "";
+  link.textContent = meta.credit || "NASA";
+  link.href = meta.creditUrl || "https://www.nasa.gov/";
+  overlay.classList.add("isAvailable");
+  overlay.setAttribute("aria-hidden", "false");
+}
+
 function ensureLightboxEl() {
   let root = document.getElementById("lightbox");
-  if (root) return root;
+  if (root) {
+    const dialog = root.querySelector(".lightbox__dialog");
+    if (dialog instanceof HTMLElement) ensureLightboxCreditOverlay(dialog);
+    return root;
+  }
 
   root = document.createElement("div");
   root.id = "lightbox";
@@ -238,14 +322,44 @@ function ensureLightboxEl() {
   next.setAttribute("aria-label", "Immagine successiva");
   next.appendChild(makeLightboxArrowSvg("right"));
 
+  dialog.appendChild(close);
+  dialog.appendChild(prev);
+  dialog.appendChild(next);
+
+  const overlay = document.createElement("div");
+  overlay.className = "lightbox__credit";
+  overlay.setAttribute("aria-hidden", "true");
+
+  const creditTitle = document.createElement("h3");
+  creditTitle.className = "lightbox__creditTitle typeTitle--panel";
+  const creditPlace = document.createElement("p");
+  creditPlace.className = "lightbox__creditPlace";
+  const creditDesc = document.createElement("p");
+  creditDesc.className = "lightbox__creditDesc typeBody";
+  const creditLine = document.createElement("p");
+  creditLine.className = "lightbox__creditLine typeBody--compact";
+  const creditLink = document.createElement("a");
+  creditLink.className = "lightbox__creditLink";
+  creditLink.target = "_blank";
+  creditLink.rel = "noopener noreferrer";
+  creditLine.append("Image Credit: ");
+  creditLine.appendChild(creditLink);
+  overlay.appendChild(creditTitle);
+  overlay.appendChild(creditPlace);
+  overlay.appendChild(creditDesc);
+  overlay.appendChild(creditLine);
+
   const img = document.createElement("img");
   img.className = "lightbox__img";
   img.alt = "Immagine";
 
-  dialog.appendChild(close);
-  dialog.appendChild(prev);
-  dialog.appendChild(next);
-  dialog.appendChild(img);
+  const stage = document.createElement("div");
+  stage.className = "lightbox__stage";
+  stage.appendChild(img);
+
+  dialog.appendChild(overlay);
+  dialog.appendChild(stage);
+
   root.appendChild(dialog);
   document.body.appendChild(root);
 
@@ -296,6 +410,7 @@ function openLightbox(urls, startIndex = 0) {
     if (!lightboxState) return;
     const src = lightboxState.urls[lightboxState.index];
     img.src = src;
+    updateLightboxCredit(root, src);
     prev.disabled = lightboxState.index <= 0;
     next.disabled = lightboxState.index >= lightboxState.urls.length - 1;
   };
@@ -618,11 +733,11 @@ function buildTimelineModel() {
   if (main.length === 0) return dots;
 
   // Desired ordering:
-  // Intro (main), Mercury (main), Contesto (minor), Gemini (main), Verso Gemini (minor), ...
-  // i.e. for each main point (except the first) we show:
+  // Mercury (main), Contesto (minor), Gemini (main), Verso Gemini (minor), ...
+  // i.e. for each main point (except the intro) we show:
   // - the main point (big)
   // - then the intermediate slide after the previous main (small)
-  dots.push({ kind: "main", label: main[0].label, index: main[0].slideIndex });
+  // NB: the intro (main[0]) non ha un puntino: è la pagina d'introduzione.
 
   for (let i = 1; i < main.length; i += 1) {
     const prev = main[i - 1];
@@ -652,10 +767,16 @@ function renderTimeline() {
 
   const items = el("div", "timeline__items");
   const dots = buildTimelineModel();
-  const maxIndex = slides.length - 1;
+
+  // Distribuisci i puntini sull'intera larghezza: il primo a 0%, l'ultimo a 100%.
+  // (la slide d'introduzione non ha puntino, quindi rimappiamo gli indici visibili)
+  const dotIndexes = dots.map((d) => d.index);
+  const minIndex = Math.min(...dotIndexes);
+  const maxIndex = Math.max(...dotIndexes);
+  const span = Math.max(1, maxIndex - minIndex);
 
   for (const d of dots) {
-    const leftPct = (d.index / maxIndex) * 100;
+    const leftPct = ((d.index - minIndex) / span) * 100;
     const btn = el("button", "dot", {
       "data-index": String(d.index),
       "data-kind": d.kind,
@@ -695,10 +816,166 @@ function setActiveTimeline(index) {
   progress.style.width = `${clamped}px`;
 }
 
+function getModelViewerScene(mv) {
+  const sym = Object.getOwnPropertySymbols(mv).find((s) => s.description === "scene");
+  return sym ? mv[sym] : null;
+}
+
+function createCheckerboardTexture() {
+  const size = 512;
+  const cells = 8;
+  const canvas = document.createElement("canvas");
+  canvas.width = canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return null;
+
+  const step = size / cells;
+  for (let y = 0; y < cells; y++) {
+    for (let x = 0; x < cells; x++) {
+      ctx.fillStyle = (x + y) % 2 === 0 ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.12)";
+      ctx.fillRect(x * step, y * step, step, step);
+    }
+  }
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(24, 24);
+  return texture;
+}
+
+function setupSuitGroundPlane(mv) {
+  if (mv.__groundPlaneGroup) return;
+
+  const install = async () => {
+    await mv.updateComplete;
+    const scene = getModelViewerScene(mv);
+    if (!scene?.target || mv.__groundPlaneGroup) return;
+
+    const dims = mv.getDimensions();
+    const center = mv.getBoundingBoxCenter();
+    const spread = Math.max(dims.x, dims.z, 1);
+    const planeSize = spread * 2.8;
+    const texture = createCheckerboardTexture();
+    if (!texture) return;
+
+    const material = new THREE.MeshBasicMaterial({
+      map: texture,
+      transparent: true,
+      opacity: 0.55,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+    });
+    const geometry = new THREE.PlaneGeometry(planeSize, planeSize);
+    const plane = new THREE.Mesh(geometry, material);
+    plane.rotation.x = -Math.PI / 2;
+    plane.position.set(center.x, center.y - dims.y / 2 - 0.002, center.z);
+    plane.name = "suitGroundPlane";
+    plane.renderOrder = -1;
+
+    const group = new THREE.Group();
+    group.name = "suitGroundPlaneGroup";
+    group.add(plane);
+    scene.target.add(group);
+    mv.__groundPlaneGroup = group;
+  };
+
+  if (mv.loaded) install();
+  else mv.addEventListener("load", install, { once: true });
+}
+
+function makeIntroNavIcon(direction) {
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("viewBox", "0 0 24 24");
+  svg.setAttribute("aria-hidden", "true");
+  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path.setAttribute("d", direction === "left" ? "M14.5 5l-7 7 7 7" : "M9 5l7 7-7 7");
+  path.setAttribute("fill", "none");
+  path.setAttribute("stroke", "currentColor");
+  path.setAttribute("stroke-width", "2.2");
+  path.setAttribute("stroke-linecap", "round");
+  path.setAttribute("stroke-linejoin", "round");
+  svg.appendChild(path);
+  return svg;
+}
+
+function updateIntroNav(navBtn, view) {
+  navBtn.innerHTML = "";
+  if (view === "credits") {
+    navBtn.className = "backToIntro introNav";
+    navBtn.setAttribute("aria-label", "Torna all'introduzione");
+    const icon = makeIntroNavIcon("left");
+    icon.classList.add("backToIntro__icon");
+    navBtn.appendChild(icon);
+    navBtn.appendChild(el("span", "", { text: "Introduzione" }));
+    return;
+  }
+
+  navBtn.className = "introCredits introNav";
+  navBtn.setAttribute("aria-label", "Apri credits e fonti");
+  navBtn.appendChild(el("span", "", { text: "Credits" }));
+  const icon = makeIntroNavIcon("right");
+  icon.classList.add("introCredits__icon");
+  navBtn.appendChild(icon);
+}
+
+function setIntroView(introRoot, view) {
+  introRoot.classList.toggle("intro--credits", view === "credits");
+  const nav = introRoot.querySelector(".introNav");
+  if (nav instanceof HTMLButtonElement) updateIntroNav(nav, view);
+}
+
+function buildIntroCreditsPanel() {
+  const panel = el("div", "intro__credits", { "aria-label": "Credits e fonti" });
+  const inner = el("div", "introCreditsPanel");
+  inner.appendChild(el("h2", "introCreditsPanel__title typeTitle", { text: "Credits" }));
+
+  const items = Array.isArray(credits) ? credits.filter((item) => item?.url) : [];
+  if (items.length === 0) {
+    inner.appendChild(
+      el("p", "introCreditsPanel__empty typeBody", {
+        text: "Aggiungi i link delle fonti in scripts/data.js, nell’array credits.",
+      })
+    );
+  } else {
+    if (creditsIntro) {
+      inner.appendChild(el("p", "introCreditsPanel__intro typeBody", { text: creditsIntro }));
+    }
+    const list = el("ul", "introCreditsPanel__list");
+    for (const item of items) {
+      const li = el("li", "introCreditsPanel__item");
+      if (item.description) {
+        li.appendChild(el("p", "introCreditsPanel__itemText typeBody", { text: item.description }));
+      }
+      li.appendChild(
+        el("a", "introCreditsPanel__link", {
+          href: item.url,
+          target: "_blank",
+          rel: "noopener noreferrer",
+          text: item.label || item.url,
+        })
+      );
+      list.appendChild(li);
+    }
+    inner.appendChild(list);
+  }
+
+  panel.appendChild(inner);
+  return panel;
+}
+
 function renderIntro(slide) {
   const root = el("section", "slide intro", { "data-type": "intro" });
   root.appendChild(el("div", "bgTexture"));
 
+  const navBtn = el("button", "introCredits introNav", { type: "button" });
+  updateIntroNav(navBtn, "home");
+  navBtn.addEventListener("click", () => {
+    setIntroView(root, root.classList.contains("intro--credits") ? "home" : "credits");
+  });
+  root.appendChild(navBtn);
+
+  const home = el("div", "intro__home");
   const wrap = el("div", "intro__wrap");
   const logo = el("img", "intro__logo", {
     src: "./assets/images/logo_nasa.png",
@@ -711,10 +988,42 @@ function renderIntro(slide) {
     logo.src = "./assets/icons/nasa-worm.svg";
   });
   wrap.appendChild(logo);
-  wrap.appendChild(el("h1", "intro__title", { text: slide.title }));
+  wrap.appendChild(el("h1", "intro__title typeHero", { text: slide.title }));
   wrap.appendChild(el("p", "intro__subtitle", { html: slide.subtitleHtml }));
-  root.appendChild(wrap);
+
+  const cta = el("button", "intro__cta", { type: "button" });
+  cta.appendChild(el("span", "", { text: "Esplora la timeline" }));
+  const ctaIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  ctaIcon.setAttribute("viewBox", "0 0 24 24");
+  ctaIcon.setAttribute("width", "22");
+  ctaIcon.setAttribute("height", "22");
+  ctaIcon.setAttribute("aria-hidden", "true");
+  const ctaPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  ctaPath.setAttribute("d", "M9 5l7 7-7 7");
+  ctaPath.setAttribute("fill", "none");
+  ctaPath.setAttribute("stroke", "currentColor");
+  ctaPath.setAttribute("stroke-width", "2.4");
+  ctaPath.setAttribute("stroke-linecap", "round");
+  ctaPath.setAttribute("stroke-linejoin", "round");
+  ctaIcon.appendChild(ctaPath);
+  cta.appendChild(ctaIcon);
+  cta.addEventListener("click", () => goTo(1));
+  wrap.appendChild(cta);
+
+  home.appendChild(wrap);
+  root.appendChild(home);
+  root.appendChild(buildIntroCreditsPanel());
   return root;
+}
+
+function renderBackToIntro() {
+  const btn = el("button", "backToIntro", {
+    type: "button",
+    "aria-label": "Torna all'introduzione",
+    html: `<svg class="backToIntro__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>Introduzione`,
+  });
+  btn.addEventListener("click", () => goTo(0));
+  return btn;
 }
 
 function renderSection(slide) {
@@ -724,6 +1033,7 @@ function renderSection(slide) {
     style: `background-image: url("${bg}");`,
   });
   root.appendChild(el("div", "bgTexture"));
+  root.appendChild(renderBackToIntro());
 
   const grid = el("div", "section");
   const media = el("div", "section__media");
@@ -735,7 +1045,21 @@ function renderSection(slide) {
     })
   );
   const body = el("div", "section__body");
-  body.appendChild(el("p", "", { html: slide.bodyHtml }));
+  if (slide.title) body.appendChild(el("h2", "section__title typeTitle", { text: slide.title }));
+  if (slide.subtitle) body.appendChild(el("p", "section__subtitle typeSubtitle", { text: slide.subtitle }));
+
+  const paragraphs = String(slide.bodyHtml || "")
+    .split(/<br\s*\/?>\s*<br\s*\/?>/i)
+    .map((part) => part.trim())
+    .filter(Boolean);
+
+  if (paragraphs.length === 0) {
+    body.appendChild(el("p", "section__text typeBody", { html: slide.bodyHtml || "" }));
+  } else {
+    for (const part of paragraphs) {
+      body.appendChild(el("p", "section__text typeBody", { html: part }));
+    }
+  }
   grid.appendChild(media);
   grid.appendChild(body);
   root.appendChild(grid);
@@ -903,7 +1227,7 @@ function renderSidePanel(panelEl, suitSlide) {
     });
 
     if (list && list.length > 0) {
-      const ul = el("ul", "bulletList");
+      const ul = el("ul", "bulletList typeBody");
       for (const t of list) {
         const li = el("li", "");
         const raw = String(t);
@@ -970,20 +1294,49 @@ function setPanel(id) {
   syncActivePinsAndItems();
 }
 
-function syncActivePinsAndItems() {
-  const slideEl = deck.querySelector(`.slide[data-index="${currentIndex}"]`);
+function getFirstPinPanelId(suitSlide, suitId) {
+  const variants = suitSlide.suitVariants && typeof suitSlide.suitVariants === "object" ? suitSlide.suitVariants : null;
+  const variantName = variants ? suitVariantById[suitId] : null;
+  const variant = variants && variantName ? variants[variantName] : null;
+  const pins = Array.isArray(variant?.pins) ? variant.pins : (suitSlide.pins || []);
+  const first = pins.find((p) => Number(p.n) === 1) || pins[0];
+  return first?.panelId ? String(first.panelId) : null;
+}
+
+function syncActivePinsForSlide(slideEl, panelId) {
   if (!slideEl) return;
   for (const pin of slideEl.querySelectorAll(".pin")) {
-    pin.classList.toggle("isActive", pin.getAttribute("data-panel-id") === sidePanelState.id);
+    pin.classList.toggle("isActive", pin.getAttribute("data-panel-id") === panelId);
   }
   for (const item of slideEl.querySelectorAll(".collapseItem")) {
-    item.classList.toggle("isActive", item.getAttribute("data-panel-id") === sidePanelState.id);
+    item.classList.toggle("isActive", item.getAttribute("data-panel-id") === panelId);
   }
+}
+
+function activateDefaultSuitPanel(index = currentIndex) {
+  const slide = slides[index];
+  if (!slide || slide.type !== "suit") return;
+  const suitId = slide.id || slide.title || "suit";
+  const panelId = getFirstPinPanelId(slide, suitId);
+  if (!panelId) return;
+
+  sidePanelState = { id: panelId };
+  isSidePanelOpen = true;
+
+  const slideEl = deck.querySelector(`.slide[data-index="${index}"]`);
+  const panelEl = slideEl?.querySelector(".sidePanel");
+  if (panelEl) renderSidePanel(panelEl, slide);
+  syncActivePinsForSlide(slideEl, panelId);
+}
+
+function syncActivePinsAndItems() {
+  syncActivePinsForSlide(deck.querySelector(`.slide[data-index="${currentIndex}"]`), sidePanelState.id);
 }
 
 function renderSuit(slide) {
   const root = el("section", "slide", { "data-type": "suit" });
   root.appendChild(el("div", "bgTexture"));
+  root.appendChild(renderBackToIntro());
 
   const grid = el("div", "suit");
 
@@ -991,9 +1344,9 @@ function renderSuit(slide) {
 
   // left
   const left = el("div", "suit__left");
-  left.appendChild(el("h2", "suit__title", { text: slide.title }));
-  left.appendChild(el("div", "suit__years", { text: slide.years }));
-  left.appendChild(el("div", "suit__intro", { text: slide.intro }));
+  left.appendChild(el("h2", "suit__title typeTitle", { text: slide.title }));
+  left.appendChild(el("p", "suit__years typeSubtitle", { text: slide.years }));
+  left.appendChild(el("p", "suit__intro typeBody", { text: slide.intro }));
 
   const collapse = el("div", "collapse", { role: "list", "data-collapse": "true" });
   left.appendChild(collapse);
@@ -1004,7 +1357,6 @@ function renderSuit(slide) {
   if (typeof slide.suitScale === "number") {
     center.style.setProperty("--suit-scale", String(slide.suitScale));
   }
-  center.appendChild(el("div", "gridPerspective", { "aria-hidden": "true" }));
   const can3d = typeof slide.model3d === "string" && slide.model3d.length > 0;
   const variants = slide.suitVariants && typeof slide.suitVariants === "object" ? slide.suitVariants : null;
   const variantKeys = variants ? Object.keys(variants) : [];
@@ -1023,12 +1375,27 @@ function renderSuit(slide) {
     center.appendChild(btn);
   }
   if (can3d) {
-    const btn = el("button", "suitToggle3d", { type: "button", "aria-label": "Cambia vista 2D/3D" });
-    btn.appendChild(el("span", "suitToggle3d__dot", { "aria-hidden": "true" }));
-    btn.appendChild(el("span", "", { text: suit3dEnabledById[suitId] ? "2D" : "3D" }));
+    const btn = el("button", "viewSwitch", {
+      type: "button",
+      "aria-label": "Cambia vista 2D/3D",
+      "aria-pressed": suit3dEnabledById[suitId] ? "true" : "false",
+    });
+    btn.appendChild(el("span", "viewSwitch__label", { text: "2D" }));
+    const track = el("span", "viewSwitch__track", { "aria-hidden": "true" });
+    track.appendChild(el("span", "viewSwitch__thumb"));
+    btn.appendChild(track);
+    btn.appendChild(el("span", "viewSwitch__label", { text: "3D" }));
+
+    const syncSwitch = () => {
+      const on = Boolean(suit3dEnabledById[suitId]);
+      btn.classList.toggle("isOn", on);
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+    };
+
+    syncSwitch();
     btn.addEventListener("click", () => {
       suit3dEnabledById[suitId] = !suit3dEnabledById[suitId];
-      btn.querySelector("span:last-child").textContent = suit3dEnabledById[suitId] ? "2D" : "3D";
+      syncSwitch();
       syncSuitViewModes(center, suitId);
     });
     center.appendChild(btn);
@@ -1059,6 +1426,8 @@ function renderSuit(slide) {
     });
     fallback.style.display = "none";
 
+    setupSuitGroundPlane(mv);
+
     stage3d.appendChild(mv);
     stage3d.appendChild(fallback);
     center.appendChild(stage3d);
@@ -1075,12 +1444,12 @@ function renderSuit(slide) {
   // Initial 2D/3D visibility
   if (can3d) syncSuitViewModes(center, suitId);
 
-  // default content: first pin if available, otherwise first collapse item
-  // On first arrival, show only the helper message (no preselected item).
-  sidePanelState = { id: null };
+  // Pannello destro aperto con il pin 1 già selezionato.
+  const defaultPanelId = getFirstPinPanelId(slide, suitId);
   isSidePanelOpen = true;
+  sidePanelState = { id: defaultPanelId };
   renderSidePanel(right, slide);
-  syncActivePinsAndItems();
+  syncActivePinsForSlide(root, defaultPanelId);
 
   return root;
 }
@@ -1207,13 +1576,23 @@ function bindObserver() {
       if (idx === currentIndex) return;
       currentIndex = idx;
       setActiveTimeline(currentIndex);
-      // reset panel selection when leaving suit slide
-      if (slides[currentIndex]?.type !== "suit") sidePanelState = { id: null };
+      updateChrome(currentIndex);
+      if (slides[currentIndex]?.type === "suit") activateDefaultSuitPanel(currentIndex);
+      else sidePanelState = { id: null };
     },
     { root: viewport, threshold: [0.6] }
   );
 
   for (const s of deck.querySelectorAll(".slide")) io.observe(s);
+}
+
+function updateChrome(index) {
+  const isIntro = index === 0;
+  timeline.classList.toggle("isHidden", isIntro);
+  if (!isIntro) {
+    const introSlide = deck.querySelector('.slide[data-type="intro"]');
+    if (introSlide?.classList.contains("intro--credits")) setIntroView(introSlide, "home");
+  }
 }
 
 function init() {
@@ -1222,6 +1601,7 @@ function init() {
   bindNavigation();
   bindObserver();
   setActiveTimeline(0);
+  updateChrome(0);
 }
 
 init();

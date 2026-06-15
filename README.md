@@ -1,38 +1,40 @@
-¨SUPSI 2026
-Corso d’interaction design, CV429.01
-Docenti: A. Gysin, G. Profeta
+¨SUPSI 2026  
+Corso d’interaction design, CV429.01  
+Docenti: A. Gysin, G. Profeta  
 
 Progetto 1: La conquista dello spazio
 
-Spacesuit evolution
+# Spacesuit evolution
+Autore: Davide Barattini \
+[Spacesuit evolution](https://github.com/ixd-supsi/2026/tree/main/esempi/es06_array_7)
 
-Autore: Davide Barattini
 
-Spacesuit evolution
-
-Intenzioni di progetto
-
-Spacesuit Evolution è un progetto che racconta l’evoluzione delle tute spaziali della NASA dagli anni ’60 fino al 2011, attraversando i principali programmi dell’esplorazione umana: Mercury, Gemini, Apollo e Space Shuttle.
+## Introduzione e tema
+Spacesuit evolution è un progetto che racconta l’evoluzione delle tute spaziali della NASA dagli anni ’60 fino al 2011, attraversando i principali programmi dell’esplorazione umana: Mercury, Gemini, Apollo e Space Shuttle.
 In questo arco temporale, le tute spaziali si sono trasformate da semplici dispositivi di sopravvivenza a sistemi altamente complessi, progettati per operare in ambienti estremi e supportare attività sempre più articolate, come le passeggiate spaziali (EVA) e le operazioni sulla superficie lunare.
 Il progetto utilizza immagini provenienti dagli archivi NASA per costruire un’esperienza interattiva che permette di osservare e comprendere come queste tute si siano evolute nel tempo, in relazione alle esigenze tecniche e agli obiettivi delle diverse missioni.
 L’obiettivo è rendere accessibile un contenuto tecnico attraverso una modalità visiva pensata per un pubblico generalista.
 
-Riferimenti progettuali
 
+## Riferimenti progettuali
 Archivi digitali NASA e collezioni open access
 A livello visivo, il progetto mantiene un’estetica pulita e informativa, lasciando centralità alle immagini delle tute e ai dettagli tecnici.
 
-Design dell’interfaccia e modalità di interazione
 
+## Design dell’interfaccia e modalità di interazione
 L’interfaccia è costruita attorno alle immagini delle tute spaziali, che rappresentano l’elemento principale dell’esperienza.
 Ogni tuta è presentata in modo isolato e accompagnata da punti interattivi (hotspot) posizionati sui diversi componenti.
 Le principali modalità di interazione includono:
-Hover o click sui punti interattivi per visualizzare informazioni specifiche
-Navigazione tra diverse tute appartenenti a epoche e missioni differenti
-Organizzazione cronologica dei contenuti
+- Hover o click sui punti interattivi per visualizzare informazioni specifiche;
+- Navigazione tra diverse tute appartenenti a epoche e missioni differenti;
+- Organizzazione cronologica dei contenuti.
 
-Tecnologia usata
+https://github.com/user-attachments/assets/38d1768e-a90e-45dd-b12b-1ac0aa1151b3
 
+[<img src="doc/cards.gif" width="500" alt="Magic trick">]()
+
+
+## Tecnologia usata
 Il progetto è sviluppato come prototipo web utilizzando HTML, CSS e JavaScript, in cui i contenuti e la struttura dell’interfaccia sono generati a partire da dati definiti in codice.
 Struttura dei dati
 Le informazioni relative alle tute spaziali, alle sezioni e alla navigazione sono organizzate in strutture dati JavaScript, in particolare array di oggetti.
@@ -57,11 +59,36 @@ approfondimenti
 dettagli tecnici
 Questo sistema consente all’utente di passare progressivamente da una visione generale a un’esplorazione più dettagliata.
 
-Target e contesto d'uso
 
+```JavaScript
+const image = new Image();
+image.onload = () => {
+	gl.bindTexture(gl.TEXTURE_2D, texture);
+	gl.texImage2D(
+		gl.TEXTURE_2D,
+		level,
+		internalFormat,
+		srcFormat,
+		srcType,
+		image
+	);
+	if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+		gl.generateMipmap(gl.TEXTURE_2D);
+	} else {
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+	}
+};
+image.src = url;
+```
+
+## Target e contesto d’uso
 Il progetto è rivolto a:
 - pubblico generalista
 - appassionati di spazio
 - utenti curiosi interessati alla tecnologia e alla storia
 Il contesto principale è la navigazione web, in particolare su desktop, dove è possibile esplorare con maggiore precisione i dettagli delle tute e interagire con i punti informativi.
 L’esperienza è pensata come esplorazione libera, associata ad una timeline.
+
+[<img src="doc/munari.jpg" width="300" alt="Supplemento al dizionario italiano">]()

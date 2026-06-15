@@ -22,17 +22,19 @@ export const slides = [
     type: "intro",
     title: "Spacesuit Evolution",
     subtitleHtml:
-      "L’evoluzione delle tute spaziali raccontata attraverso il contesto storico, le missioni e le innovazioni che hanno reso possibile <strong>vivere e lavorare nello spazio</strong>.",
+      "L’evoluzione delle tute spaziali raccontata attraverso il contesto storico, le missioni e le innovazioni che hanno reso possibile vivere e lavorare nello spazio.",
   },
 
   {
     type: "section",
     mainId: "intro",
     minorLabel: "Contesto",
+    title: "Mercury",
+    subtitle: "I primi esseri umani nello spazio",
     image: "./assets/images/corsa_spazio2.jpg",
     bgImage: "./assets/images/background_1.jpeg",
     bodyHtml:
-      "Alla fine degli anni ’50, la <strong>Guerra Fredda</strong> tra Stati Uniti e Unione Sovietica ha dato il via a una competizione tecnologica senza precedenti, nota come “<strong>corsa allo spazio</strong>”.<br><br>L'Unione Sovietica lanciò lo <strong>Sputnik 1</strong> nel 1957, il primo satellite artificiale della storia. Questo evento scosse gli Stati Uniti e spinse alla fondazione della <strong>NASA nel 1958</strong>.<br><br>In questo periodo, l'attenzione era rivolta a capire come l'uomo potesse sopravvivere nello spazio, portando ai primi studi sulle tute pressurizzate e sui sistemi di supporto vitale.",
+      "Il programma Mercury rappresentò il primo tentativo degli Stati Uniti di inviare un essere umano nello spazio e riportarlo sulla Terra in sicurezza. In questa fase pionieristica, l'obiettivo principale era comprendere come il corpo umano potesse reagire alle condizioni estreme del volo spaziale, come l'assenza di gravità, l'isolamento e le forti accelerazioni.<br><br>Queste sfide portarono allo sviluppo delle prime tute spaziali pressurizzate e dei sistemi di supporto vitale, progettati per garantire la sopravvivenza degli astronauti durante le missioni.",
   },
 
   {
@@ -217,9 +219,12 @@ export const slides = [
     type: "section",
     mainId: "mercury",
     minorLabel: "Verso Gemini",
+    title: "Gemini",
+    subtitle: "Prepararsi per la Luna",
     image: "./assets/images/gemini.jpg",
     bgImage: "./assets/images/background_gemini.jpg",
-    bodyHtml: "Nel pieno della corsa allo spazio, il programma <strong>Gemini</strong> segnò un passaggio fondamentale tra i primi voli orbitali e le future missioni lunari. Gli <strong>Stati Uniti</strong> iniziarono a sperimentare manovre più complesse in orbita, come l’aggancio tra veicoli spaziali e le prime attività <strong>extraveicolari.</strong><br><br>Questo periodo portò allo sviluppo delle prime tute realmente progettate per le <strong>attività fuori dalla capsula</strong>, pensate per garantire mobilità e protezione nel vuoto spaziale, in condizioni ancora sperimentali e altamente rischiose.",
+    bodyHtml:
+      "Nel pieno della corsa allo spazio, il programma Gemini segnò un passaggio fondamentale tra i primi voli orbitali e le future missioni lunari. Gli Stati Uniti iniziarono a sperimentare manovre più complesse in orbita, come l'aggancio tra veicoli spaziali e le prime attività extraveicolari.<br><br>Questo periodo portò allo sviluppo delle prime tute realmente progettate per le <strong>attività fuori dalla capsula</strong>, pensate per garantire mobilità e protezione nel vuoto spaziale, in condizioni ancora sperimentali e altamente rischiose.",
   },
 
   {
@@ -406,9 +411,12 @@ export const slides = [
     type: "section",
     mainId: "gemini",
     minorLabel: "Verso Apollo",
+    title: "Apollo",
+    subtitle: "Camminare sulla Luna",
     image: "./assets/images/apollo.jpg",
     bgImage: "./assets/images/background_apollo.jpg",
-    bodyHtml: "Con il programma <strong>Apollo</strong>, l’obiettivo si spostò esplicitamente verso <strong>l’esplorazione della Luna.</strong> In un contesto di forte pressione politica e tecnologica, la NASA sviluppò missioni sempre più complesse che culminarono con il primo sbarco umano sul suolo lunare nel <strong>1969.</strong> <br><br> Le esigenze operative richiesero lo sviluppo di tute altamente avanzate, capaci di supportare lunghe attività extraveicolari sulla <strong>superficie lunare</strong>, proteggendo gli astronauti da temperature estreme, radiazioni e polveri lunari.",
+    bodyHtml:
+      "Con il programma Apollo, l'obiettivo si spostò esplicitamente verso l'esplorazione della Luna. In un contesto di forte pressione politica e tecnologica, la NASA sviluppò missioni sempre più complesse che culminarono con il primo sbarco umano sul suolo lunare nel 1969.<br><br>Le esigenze operative richiesero lo sviluppo di tute altamente avanzate, capaci di supportare lunghe attività extraveicolari sulla <strong>superficie lunare</strong>, proteggendo gli astronauti da temperature estreme, radiazioni e polveri lunari.",
   },
 
   {
@@ -605,9 +613,12 @@ export const slides = [
     type: "section",
     mainId: "apollo",
     minorLabel: "Verso Shuttle",
+    title: "Space Shuttle",
+    subtitle: "Lavorare nello spazio",
     image: "./assets/images/spaceshuttle.jpg",
     bgImage: "./assets/images/background_spaceshuttle.jpg",
-    bodyHtml: "Dopo le missioni lunari, l’attenzione della NASA si spostò verso un accesso più frequente e riutilizzabile allo spazio. Il programma <strong>Space Shuttle</strong> introdusse una nuova era di voli orbitali, con missioni scientifiche, di manutenzione e costruzione in orbita terrestre.<br><br>In questo contesto vennero sviluppate <strong>tute più modulari e riutilizzabili</strong>, progettate per attività extraveicolari in orbita bassa terrestre, con maggiore enfasi su sicurezza, ergonomia e supporto alle missioni di lunga durata.",
+    bodyHtml:
+      "Dopo le missioni lunari, l'attenzione della NASA si spostò verso un accesso più frequente e riutilizzabile allo spazio. Il programma Space Shuttle introdusse una nuova era di voli orbitali, con missioni scientifiche, di manutenzione e costruzione in orbita terrestre.<br><br>In questo contesto vennero sviluppate <strong>tute più modulari e riutilizzabili</strong>, progettate per attività extraveicolari in orbita bassa terrestre, con maggiore enfasi su sicurezza, ergonomia e supporto alle missioni di lunga durata.",
   },
 
   {
@@ -1284,6 +1295,52 @@ export const slides = [
         },
       },
     },
+  },
+];
+
+/**
+ * Fonti di immagini e informazioni (Credits).
+ * intro: testo iniziale del modale
+ * items: { description, url, label? }
+ */
+export const creditsIntro =
+  "Immagini, testi e approfondimenti tratti principalmente dalle risorse ufficiali NASA. Di seguito i link alle pagine consultate.";
+
+export const credits = [
+  {
+    description: "Panoramica sulle tute spaziali nella sezione Suits and Rovers.",
+    url: "https://www.nasa.gov/suits-and-rovers/spacesuits/",
+    label: "NASA — Suits and Rovers: Spacesuits",
+  },
+  {
+    description: "Tute spaziali, tecnologie e missioni del programma umano NASA.",
+    url: "https://www.nasa.gov/humans-in-space/astronauts/spacesuits/",
+    label: "NASA — Astronauts: Spacesuits",
+  },
+  {
+    description: "Galleria fotografica del Project Mercury.",
+    url: "https://www.nasa.gov/gallery/project-mercury/",
+    label: "NASA — Project Mercury Gallery",
+  },
+  {
+    description: "Storia, obiettivi e missioni del programma Mercury.",
+    url: "https://www.nasa.gov/project-mercury/",
+    label: "NASA — Project Mercury",
+  },
+  {
+    description: "Programma Gemini: missioni, astronauti e risorse storiche.",
+    url: "https://www.nasa.gov/gemini/",
+    label: "NASA — Project Gemini",
+  },
+  {
+    description: "Programma Apollo e missioni verso la Luna.",
+    url: "https://www.nasa.gov/the-apollo-program/",
+    label: "NASA — The Apollo Program",
+  },
+  {
+    description: "Storia, orbiter e missioni dello Space Shuttle.",
+    url: "https://www.nasa.gov/space-shuttle/",
+    label: "NASA — Space Shuttle",
   },
 ];
 
