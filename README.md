@@ -37,30 +37,10 @@ Le principali modalità di interazione includono:
 
 
 ## Tecnologia usata
-Il progetto è sviluppato come prototipo web utilizzando HTML, CSS e JavaScript, in cui i contenuti e la struttura dell’interfaccia sono generati a partire da dati definiti in codice.
-Struttura dei dati
+Il progetto è sviluppato come prototipo web utilizzando HTML, CSS e JavaScript, in cui i contenuti e la struttura dell’interfaccia sono generati a partire da dati definiti in codice. \
+Struttura dei dati \
 Le informazioni relative alle tute spaziali, alle sezioni e alla navigazione sono organizzate in strutture dati JavaScript, in particolare array di oggetti.
 L’intero flusso dell’esperienza è definito all’interno dell’array slides, che rappresenta la sequenza delle schermate dell’applicazione. Ogni slide è identificata da un type (intro, section, suit) e contiene proprietà specifiche come titolo, testi, immagini e contenuti HTML.
-- Le tute spaziali sono descritte tramite:
-informazioni generali (nome, anni, introduzione)
-risorse visive (immagini, modelli 3D)
-hotspot interattivi
-pannelli informativi strutturati in sezioni (caratteristiche, materiali, missioni, astronauti, componenti)
-Questa struttura permette di gestire contenuti complessi in modo scalabile e facilmente aggiornabile.
-- Gestione dell’interazione
-Le interazioni utente sono gestite tramite JavaScript e includono:
-navigazione tra le slide
-apertura dei pannelli informativi
-interazione con gli hotspot
-aggiornamento dinamico dei contenuti
-Il layout è realizzato tramite CSS (Grid e Flexbox).
-I contenuti testuali e visivi sono stati raccolti da archivi pubblici della NASA e rielaborati per essere integrati nell’interfaccia.
-Le informazioni sono organizzate in livelli:
-- slide principali
-- approfondimenti 
-- dettagli tecnici
-Questo sistema consente all’utente di passare progressivamente da una visione generale a un’esplorazione più dettagliata.
-
 Definizione degli hotspot
 ```JavaScript
 pins: [
