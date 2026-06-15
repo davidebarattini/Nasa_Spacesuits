@@ -19,7 +19,7 @@ L’obiettivo è rendere accessibile un contenuto tecnico attraverso una modalit
 ## Riferimenti progettuali
 [<img src="doc/Figma.jpg" width="200" alt="Supplemento al dizionario italiano">]()
 [<img src="doc/Framer.jpg" width="200" alt="Supplemento al dizionario italiano">]()
-[<img src="doc/Apple.png" width="200" alt="Supplemento al dizionario italiano">]()
+[<img src="doc/Apple.png" width="200" alt="Supplemento al dizionario italiano">]()\
 Per la progettazione dell'interfaccia sono stati presi come riferimento diversi prodotti digitali esistenti.
 Apple ha ispirato il sistema di hotspot interattivi, utilizzati per evidenziare e approfondire specifici elementi delle tute spaziali direttamente all'interno della visualizzazione.
 Figma e Framer hanno invece influenzato la struttura dell'interfaccia, basata su un layout a tre colonne che separa navigazione, contenuto principale e pannello di approfondimento, favorendo un'esplorazione chiara e organizzata delle informazioni.
