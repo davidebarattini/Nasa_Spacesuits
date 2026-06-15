@@ -33,7 +33,7 @@ Le principali modalità di interazione includono:
 - Navigazione tra diverse tute appartenenti a epoche e missioni differenti;
 - Organizzazione cronologica dei contenuti.
 
-[<img src="doc/interfaccia.png" width="500" alt="Magic trick">]()
+[<img src="doc/Interfaccia.png" width="500" alt="Magic trick">]()
 
 
 ## Tecnologia usata
