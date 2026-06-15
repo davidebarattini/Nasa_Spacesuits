@@ -64,5 +64,3 @@ Il progetto è rivolto a:
 - utenti curiosi interessati alla tecnologia e alla storia
 Il contesto principale è la navigazione web, in particolare su desktop, dove è possibile esplorare con maggiore precisione i dettagli delle tute e interagire con i punti informativi.
 L’esperienza è pensata come esplorazione libera, associata ad una timeline.
-
-[<img src="doc/munari.jpg" width="300" alt="Supplemento al dizionario italiano">]()
