@@ -27,6 +27,7 @@ Figma e Framer hanno invece influenzato la struttura dell'interfaccia, basata su
 
 
 ## Design dell’interfaccia e modalità di interazione
+[<img src="doc/Video.gif" width="500" alt="Video Schermata">]()
 L’interfaccia è costruita attorno alle immagini delle tute spaziali, che rappresentano l’elemento principale dell’esperienza.
 Ogni tuta è presentata in modo isolato e accompagnata da punti interattivi (hotspot) posizionati sui diversi componenti.
 Le principali modalità di interazione includono:
