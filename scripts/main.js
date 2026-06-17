@@ -216,40 +216,57 @@ function ensureLightboxCreditOverlay(dialog) {
     stage.appendChild(img);
   }
 
-  let overlay = dialog.querySelector(".lightbox__credit");
-  if (overlay instanceof HTMLElement && overlay.parentElement === stage) {
-    dialog.insertBefore(overlay, stage);
+  let frame = stage.querySelector(".lightbox__frame");
+  if (!frame) {
+    frame = document.createElement("div");
+    frame.className = "lightbox__frame";
+    if (img.parentElement === stage) {
+      stage.insertBefore(frame, img);
+      frame.appendChild(img);
+    } else {
+      frame.appendChild(img);
+      stage.appendChild(frame);
+    }
+  } else if (img.parentElement !== frame) {
+    frame.appendChild(img);
   }
 
-  if (overlay instanceof HTMLElement) return stage;
+  let overlay = frame.querySelector(".lightbox__credit");
+  if (!(overlay instanceof HTMLElement)) {
+    overlay = dialog.querySelector(".lightbox__credit");
+    if (overlay instanceof HTMLElement) {
+      frame.appendChild(overlay);
+    } else {
+      overlay = document.createElement("div");
+      overlay.className = "lightbox__credit";
+      overlay.setAttribute("aria-hidden", "true");
 
-  overlay = document.createElement("div");
-  overlay.className = "lightbox__credit";
-  overlay.setAttribute("aria-hidden", "true");
+      const title = document.createElement("h3");
+      title.className = "lightbox__creditTitle typeTitle--panel";
 
-  const title = document.createElement("h3");
-  title.className = "lightbox__creditTitle typeTitle--panel";
+      const place = document.createElement("p");
+      place.className = "lightbox__creditPlace";
 
-  const place = document.createElement("p");
-  place.className = "lightbox__creditPlace";
+      const desc = document.createElement("p");
+      desc.className = "lightbox__creditDesc typeBody";
 
-  const desc = document.createElement("p");
-  desc.className = "lightbox__creditDesc typeBody";
+      const creditLine = document.createElement("p");
+      creditLine.className = "lightbox__creditLine typeBody--compact";
+      const link = document.createElement("a");
+      link.className = "lightbox__creditLink";
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      creditLine.append("Image Credit: ");
+      creditLine.appendChild(link);
 
-  const creditLine = document.createElement("p");
-  creditLine.className = "lightbox__creditLine typeBody--compact";
-  const link = document.createElement("a");
-  link.className = "lightbox__creditLink";
-  link.target = "_blank";
-  link.rel = "noopener noreferrer";
-  creditLine.append("Image Credit: ");
-  creditLine.appendChild(link);
+      overlay.appendChild(title);
+      overlay.appendChild(place);
+      overlay.appendChild(desc);
+      overlay.appendChild(creditLine);
+      frame.appendChild(overlay);
+    }
+  }
 
-  overlay.appendChild(title);
-  overlay.appendChild(place);
-  overlay.appendChild(desc);
-  overlay.appendChild(creditLine);
-  dialog.insertBefore(overlay, stage);
   return stage;
 }
 
@@ -353,11 +370,15 @@ function ensureLightboxEl() {
   img.className = "lightbox__img";
   img.alt = "Immagine";
 
+  const frame = document.createElement("div");
+  frame.className = "lightbox__frame";
+  frame.appendChild(img);
+  frame.appendChild(overlay);
+
   const stage = document.createElement("div");
   stage.className = "lightbox__stage";
-  stage.appendChild(img);
+  stage.appendChild(frame);
 
-  dialog.appendChild(overlay);
   dialog.appendChild(stage);
 
   root.appendChild(dialog);
@@ -396,6 +417,10 @@ function makeLightboxArrowSvg(dir) {
 /** @type {{ urls: string[], index: number } | null} */
 let lightboxState = null;
 
+function isGalleryModalOpen() {
+  return Boolean(lightboxState || videoLightboxState);
+}
+
 function openLightbox(urls, startIndex = 0) {
   const root = ensureLightboxEl();
   const img = root.querySelector(".lightbox__img");
@@ -409,7 +434,17 @@ function openLightbox(urls, startIndex = 0) {
   const sync = () => {
     if (!lightboxState) return;
     const src = lightboxState.urls[lightboxState.index];
+    img.classList.remove("isReady");
+    img.onload = () => {
+      img.classList.add("isReady");
+      img.onload = null;
+    };
+    img.onerror = () => {
+      img.classList.add("isReady");
+      img.onerror = null;
+    };
     img.src = src;
+    if (img.complete) img.classList.add("isReady");
     updateLightboxCredit(root, src);
     prev.disabled = lightboxState.index <= 0;
     next.disabled = lightboxState.index >= lightboxState.urls.length - 1;
@@ -429,11 +464,18 @@ function openLightbox(urls, startIndex = 0) {
 
   const onKey = (e) => {
     if (!lightboxState) return;
-    if (e.key === "Escape") closeLightbox();
-    else if (e.key === "ArrowLeft") prev.click();
-    else if (e.key === "ArrowRight") next.click();
+    if (e.key === "Escape") {
+      e.preventDefault();
+      closeLightbox();
+    } else if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      prev.click();
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      next.click();
+    }
   };
-  window.addEventListener("keydown", onKey, { passive: true });
+  window.addEventListener("keydown", onKey);
   root._onKey = onKey;
 
   root.classList.add("isOpen");
@@ -629,11 +671,18 @@ function openVideoLightbox(items, startIndex = 0) {
 
   const onKey = (e) => {
     if (!videoLightboxState) return;
-    if (e.key === "Escape") closeVideoLightbox();
-    else if (e.key === "ArrowLeft") prev.click();
-    else if (e.key === "ArrowRight") next.click();
+    if (e.key === "Escape") {
+      e.preventDefault();
+      closeVideoLightbox();
+    } else if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      prev.click();
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      next.click();
+    }
   };
-  window.addEventListener("keydown", onKey, { passive: true });
+  window.addEventListener("keydown", onKey);
   root._onKey = onKey;
 
   root.classList.add("isOpen");
@@ -682,6 +731,7 @@ function bindNavigation() {
   viewport.addEventListener(
     "wheel",
     (e) => {
+      if (isGalleryModalOpen()) return;
       if (isOverSidePanel(e.target)) return;
       if (Math.abs(e.deltaY) < 2 && Math.abs(e.deltaX) < 2) return;
       e.preventDefault();
@@ -710,6 +760,7 @@ function bindNavigation() {
   // Keyboard arrows
   window.addEventListener("keydown", (e) => {
     if (e.defaultPrevented) return;
+    if (isGalleryModalOpen()) return;
     if (isOverSidePanel(document.activeElement)) return;
     if (e.key === "ArrowRight" || e.key === "PageDown") {
       e.preventDefault();

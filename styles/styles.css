@@ -738,81 +738,92 @@ body {
   width: min(1040px, 94vw);
   height: min(760px, 86vh);
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 72px 88px 48px;
+  padding: 72px 88px;
+  overflow: hidden;
 }
 .lightbox__stage {
-  position: relative;
-  flex: 1 1 auto;
-  min-height: 0;
-  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+.lightbox__frame {
+  position: relative;
+  display: inline-block;
+  line-height: 0;
+  max-width: min(864px, calc(94vw - 176px));
+  max-height: min(616px, calc(86vh - 144px));
 }
 .lightbox__img {
-  max-width: 100%;
-  max-height: 100%;
   display: block;
+  width: auto;
+  height: auto;
+  max-width: min(864px, calc(94vw - 176px));
+  max-height: min(616px, calc(86vh - 144px));
+  object-fit: contain;
   border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
   background: #000;
+  opacity: 0;
+  transition: opacity 160ms ease;
+}
+.lightbox__img.isReady {
+  opacity: 1;
 }
 .lightbox__credit {
-  position: relative;
-  width: min(100%, 760px);
-  flex-shrink: 0;
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 0;
-  padding: 0 8px;
+  justify-content: center;
+  gap: 12px;
+  padding: 28px 40px;
+  margin: 0 auto;
   text-align: center;
-  max-height: 0;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.78);
   opacity: 0;
-  overflow: hidden;
-  transform: translateY(6px);
-  transition:
-    max-height 220ms ease,
-    opacity 180ms ease,
-    transform 180ms ease,
-    margin-bottom 180ms ease,
-    padding 180ms ease;
+  visibility: hidden;
+  transition: opacity 180ms ease, visibility 180ms ease;
+  transition-delay: 0ms;
   pointer-events: none;
 }
-.lightbox__dialog:has(.lightbox__stage:hover) .lightbox__credit.isAvailable,
-.lightbox__credit.isAvailable:focus-within {
-  max-height: 260px;
+.lightbox__frame:hover .lightbox__credit.isAvailable {
   opacity: 1;
-  transform: translateY(0);
-  margin-bottom: 14px;
-  padding: 0 8px 4px;
+  visibility: visible;
   pointer-events: auto;
+  transition-delay: 200ms;
+}
+.lightbox__creditTitle,
+.lightbox__creditPlace,
+.lightbox__creditDesc,
+.lightbox__creditLine {
+  margin: 0 auto;
+  text-align: center;
 }
 .lightbox__creditTitle {
-  margin: 0;
   max-width: 52ch;
   color: var(--text);
 }
 .lightbox__creditPlace {
-  margin: 0;
   font-size: var(--type-body-size);
   font-weight: 600;
   line-height: 1.4;
   color: rgba(255, 255, 255, 0.92);
 }
 .lightbox__creditDesc {
-  margin: 0;
   max-width: min(54ch, 90%);
   color: var(--muted);
   text-wrap: pretty;
 }
 .lightbox__creditLine {
-  margin: 4px 0 0;
   color: var(--muted);
 }
 .lightbox__creditLink {
