@@ -35,14 +35,14 @@ Le principali modalità di interazione includono:
 - Navigazione tra diverse tute appartenenti a epoche e missioni differenti;
 - Organizzazione cronologica dei contenuti.
 
-[<img src="doc/Interfaccia.png" width="500" alt="Magic trick">]()\
+[<img src="doc/Interfaccia.png" width="500" alt="Magic trick">]()
 
 
 ## Tecnologia usata
-Il progetto è sviluppato come prototipo web utilizzando HTML, CSS e JavaScript, in cui i contenuti e la struttura dell’interfaccia sono generati a partire da dati definiti in codice. \
-Struttura dei dati \
+Il progetto è sviluppato come prototipo web utilizzando HTML, CSS e JavaScript, in cui i contenuti e la struttura dell’interfaccia sono generati a partire da dati definiti in codice. 
+### Struttura dei dati 
 Le informazioni relative alle tute spaziali, alle sezioni e alla navigazione sono organizzate in strutture dati JavaScript, in particolare array di oggetti.
-L’intero flusso dell’esperienza è definito all’interno dell’array slides, che rappresenta la sequenza delle schermate dell’applicazione. Ogni slide è identificata da un type (intro, section, suit) e contiene proprietà specifiche come titolo, testi, immagini e contenuti HTML.\
+L’intero flusso dell’esperienza è definito all’interno dell’array slides, che rappresenta la sequenza delle schermate dell’applicazione. Ogni slide è identificata da un type (intro, section, suit) e contiene proprietà specifiche come titolo, testi, immagini e contenuti HTML.
 ### Definizione degli hotspot
 ```JavaScript
 pins: [
