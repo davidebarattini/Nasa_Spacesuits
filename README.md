@@ -42,8 +42,8 @@ Le principali modalità di interazione includono:
 Il progetto è sviluppato come prototipo web utilizzando HTML, CSS e JavaScript, in cui i contenuti e la struttura dell’interfaccia sono generati a partire da dati definiti in codice. \
 Struttura dei dati \
 Le informazioni relative alle tute spaziali, alle sezioni e alla navigazione sono organizzate in strutture dati JavaScript, in particolare array di oggetti.
-L’intero flusso dell’esperienza è definito all’interno dell’array slides, che rappresenta la sequenza delle schermate dell’applicazione. Ogni slide è identificata da un type (intro, section, suit) e contiene proprietà specifiche come titolo, testi, immagini e contenuti HTML.
-Definizione degli hotspot
+L’intero flusso dell’esperienza è definito all’interno dell’array slides, che rappresenta la sequenza delle schermate dell’applicazione. Ogni slide è identificata da un type (intro, section, suit) e contiene proprietà specifiche come titolo, testi, immagini e contenuti HTML.\
+### Definizione degli hotspot
 ```JavaScript
 pins: [
   { n: 1, x: "52%", y: "22%", panelId: "casco" },
@@ -51,18 +51,18 @@ pins: [
   { n: 3, x: "40%", y: "70%", panelId: "giunture" },
 ]
 ```
-Creazione dei bottoni
+### Creazione dei bottoni
 ```JavaScript
 const btn = el("button", "pin", {
   style: `left:${p.x};top:${p.y};`,
   "data-panel-id": p.panelId,
 }); "40%", y: "70%", panelId: "giunture" },
 ```
-Click hotspot
+### Click hotspot
 ```JavaScript
 btn.addEventListener("click", () => setPanel(p.panelId));
 ```
-Aggiornamento pannello laterale
+### Aggiornamento pannello laterale
 ```JavaScript
 function setPanel(id) {
   sidePanelState = { id: String(id) };
